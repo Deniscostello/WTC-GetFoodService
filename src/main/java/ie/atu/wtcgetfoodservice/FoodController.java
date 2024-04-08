@@ -1,4 +1,43 @@
 package ie.atu.wtcgetfoodservice;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
 public class FoodController {
+
+    private final FoodService foodService;
+    private final RecipeClient recipeClient;
+
+    public FoodController(FoodService foodService, RecipeClient recipeClient) {
+        this.foodService = foodService;
+        this.recipeClient = recipeClient;
+    }
+
+
+    @PostMapping("food/getAllFood")
+    public ResponseEntity<Map<String, List<String>>> getAllFood(@RequestBody Food food){
+        List<String> foods = foodService.getFoods(food.getUserId());
+        System.out.println(foods);
+        Map<String, List<String>> response = new HashMap<>();
+        response.put("foods", foods);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping ("food/getFoodForRecipe")
+    public ResponseEntity<Map<String, List<RecipeData>>> getFoodForRecipe(@RequestBody Food food){
+        List<String> usersFood = foodService.getFoods(food.getUserId());
+        System.out.println(usersFood);
+        List<RecipeData> recipesFound = recipeClient.foodDetails(usersFood);
+        Map<String, List<RecipeData>> response = new HashMap<>();
+        response.put("recipes", recipesFound);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
