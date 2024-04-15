@@ -25,7 +25,6 @@ public class FoodController {
     @PostMapping("food/getAllFood")
     public ResponseEntity<Map<String, List<String>>> getAllFood(@RequestBody Food food){
         List<String> foods = foodService.getFoods(food.getUserId());
-        System.out.println(foods);
         Map<String, List<String>> response = new HashMap<>();
         response.put("foods", foods);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -34,7 +33,6 @@ public class FoodController {
     @PostMapping ("food/getFoodForRecipe")
     public ResponseEntity<Map<String, List<RecipeData>>> getFoodForRecipe(@RequestBody Food food){
         List<String> usersFood = foodService.getFoods(food.getUserId());
-        System.out.println(usersFood);
         List<RecipeData> recipesFound = recipeClient.foodDetails(usersFood);
         Map<String, List<RecipeData>> response = new HashMap<>();
         response.put("recipes", recipesFound);
