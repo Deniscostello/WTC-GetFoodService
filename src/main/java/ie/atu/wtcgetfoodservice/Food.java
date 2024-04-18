@@ -24,4 +24,9 @@ public class Food {
 
     private List<String> foods;
 
+
+    private int recipeId;
+
+    private List<Integer> recipeSaved;
+
 }

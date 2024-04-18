@@ -14,21 +14,33 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
-    public List<String> getFoods(String userId){
-        List<String> allFoods = new ArrayList<>();
-        Optional<Food> userFoodList = foodRepository.findByUserId(userId);
-        if(userFoodList.isPresent()){
-            Food food = userFoodList.get();
-            if(food.getFoods() != null){
-                return food.getFoods();
-            }
-            else{
-                if(food.getFoodName() != null){
-                    allFoods.add(food.getFoodName());
-                    return allFoods;
-                }
-            }
-        }
-        return allFoods;
+//    public List<String> getFoods(String userId){
+//        List<String> allFoods = new ArrayList<>();
+//        Optional<Food> userFoodList = foodRepository.findByUserId(userId);
+//        if(userFoodList.isPresent()){
+//            Food food = userFoodList.get();
+//            if(food.getFoods() != null){
+//                return food.getFoods();
+//            }
+//            else{
+//                if(food.getFoodName() != null){
+//                    allFoods.add(food.getFoodName());
+//                    return allFoods;
+//                }
+//            }
+//        }
+//        return allFoods;
+//    }
+
+    public List<Integer> getFavRecipe(String userId){
+        Food userFoodList = foodRepository.findByUserId(userId);
+
+        return userFoodList.getRecipeSaved();
     }
+
+    public List<String> getFoods(String userId){
+        Food userFoodList = foodRepository.findByUserId(userId);
+        return userFoodList.getFoods();
+    }
+
 }
