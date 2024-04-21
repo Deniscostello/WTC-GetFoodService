@@ -1,10 +1,12 @@
 package ie.atu.wtcgetfoodservice;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class FoodService {
@@ -29,69 +31,37 @@ public class FoodService {
         }
     }
 
-//        List<String> allFoods = new ArrayList<>();
-//      //  Optional<Food> userFoodList = foodRepository.findByUserId(userId);
-//        if(userFoodList.isPresent()){
-//            Food food = userFoodList.get();
-//            if(food.getFoods() != null){
-//                return food.getFoods();
-//            }
-//            else{
-//                if(food.getFoodName() != null){
-//                    allFoods.add(food.getFoodName());
-//                    return allFoods;
-//                }
-//            }
-//        }
-//        return allFoods;
 
 
-//    public List<Integer> getFavRecipe(String userId){
-//        Optional<Food> userFoodList = foodRepository.findByUserId(userId);
-//        if(userFoodList.isPresent()) {
-//            Food food = userFoodList.get();
-//            food.getRecipeSaved();
-//        }
-//
-//        return userFoodList.getRecipeSaved();
-//    }
+    @Async
+    public CompletableFuture<List<String>> getFoodsAsync(String userId){
+        List<String> foods = getFoods(userId);
+        return CompletableFuture.completedFuture(foods);
+    }
 
-//    public List<String> getFoods(String userId){
-//        Food userFoodList = foodRepository.findByUserId(userId);
-//        return userFoodList.getFoods();
-//    }
+    @Async
+    public CompletableFuture<List<Integer>> getFavRecipesAsync(String userId){
+        List<Integer> favRecipes = getFavRecipe(userId);
+        return CompletableFuture.completedFuture(favRecipes);
+    }
 
-//    public List<String> getFoods(String userId) {
-//        Optional<Food> userFoodList = foodRepository.findByUserId(userId);
-//
-//        if(userFoodList.isPresent()){
-//            Food food = userFoodList.get();
-//            List<String> foodList = food.getFoods();
-//            return foodList;
-//        }
-//        else {
-//            List<String> newfoodList = new ArrayList<>();
-//            newfoodList.add(inputFood.getFoodName());
-//            inputFood.setFoods(newfoodList);
-//            return foodRepository.save(inputFood);
-//        }
-//    }
-//public List<String> getFoods(String userId){
-//    List<String> allFoods = new ArrayList<>();
-//    Optional<Food> userFoodList = foodRepository.findByUserId(userId);
-//    if(userFoodList.isPresent()){
-//        Food food = userFoodList.get();
-//        if(food.getFoods() != null){
-//            return food.getFoods();
-//        }
-//        else{
-//            if(food.getFoodName() != null){
-//                allFoods.add(food.getFoodName());
-//                return allFoods;
-//            }
-//        }
-//    }
-//    return allFoods;
-//}
+
+    public List<Integer> getFavRecipe(String userId){
+        try {
+            Optional<Food> userFoodList = foodRepository.findByUserId(userId);
+            if(userFoodList.isPresent()) {
+                Food food = userFoodList.get();
+                return food.getRecipeSaved();
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+
+
+
 
 }
