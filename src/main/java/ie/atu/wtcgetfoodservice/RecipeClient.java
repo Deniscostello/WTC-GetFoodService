@@ -9,4 +9,7 @@ import java.util.List;
 public interface RecipeClient {
     @PostMapping("/findRecipes")
     List<RecipeData> foodDetails(List<String> usersFood);
+
+    @PostMapping("/findRecipeById")
+    List<RecipeData> findById(List<Integer> favRecipes);
 }
