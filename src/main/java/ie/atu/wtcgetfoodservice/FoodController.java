@@ -28,14 +28,12 @@ public class FoodController {
     @PostMapping("food/getAllFood")
     public ResponseEntity<Map<String, List<String>>> getAllFood(@RequestBody Food food) throws ExecutionException, InterruptedException {
         long startTime = System.currentTimeMillis();
-//        List<String> foods = foodService.getFoods(food.getUserId());
         CompletableFuture<List<String>> foodsFuture = foodService.getFoodsAsync(food.getUserId());
         List<String> foods = foodsFuture.get();
-
         Map<String, List<String>> response = new HashMap<>();
         response.put("foods", foods);
         long endTime = System.currentTimeMillis();
-        System.out.println("Total time = " + (endTime - startTime) + " ms" );
+       // System.out.println("Total time = " + (endTime - startTime) + " ms" );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -63,6 +61,9 @@ public class FoodController {
             CompletableFuture<List<Integer>> favRecipeFuture = foodService.getFavRecipesAsync(food.getUserId());
             List<Integer> favRecipes = favRecipeFuture.get();
            // List<Integer> favRecipes = foodService.getFavRecipe(food.getUserId());
+            if(favRecipes == null){
+                return null;
+            }
             List<RecipeData> favRecipesFound = recipeClient.findById(favRecipes);
             Map<String, List<RecipeData>> response = new HashMap<>();
             response.put("FavRecipes", favRecipesFound);

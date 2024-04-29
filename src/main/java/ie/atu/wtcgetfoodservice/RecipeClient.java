@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
-@FeignClient(name="recipe-service", url = "http://localhost:8084")
+@FeignClient(name="recipe-service", url = "http://recipes-service:8084")
 public interface RecipeClient {
     @PostMapping("/findRecipes")
     List<RecipeData> foodDetails(List<String> usersFood);
